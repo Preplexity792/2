@@ -314,25 +314,27 @@ body {
   }
 }
 
-/* Mobile: Slider with arrows */
+/* Mobile: Slider with arrows - РЕШЕНИЕ 1 */
 @media (max-width: 767px) {
   .cards-container {
     position: relative;
     overflow: hidden;
-    padding: 0 50px;
+    padding: 0;
   }
 
   .cards-wrapper {
     display: flex;
     transition: transform 0.3s var(--ease-standard);
+    width: 100%;
   }
 
   .card {
     min-width: 100%;
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0 var(--space-8);
+    padding: 0 var(--space-16);
   }
 
   .card-image {
@@ -379,11 +381,11 @@ body {
   }
 
   .arrow-left {
-    left: 5px;
+    left: 10px;
   }
 
   .arrow-right {
-    right: 5px;
+    right: 10px;
   }
 
   .arrow.hidden {
@@ -583,15 +585,15 @@ body {
 
     const animationSequence = [
         { element: helpIcon, duration: 1000 },
-        { element: null, duration: 400 }, // пауза
+        { element: null, duration: 400 },
         { element: announcementIcon, duration: 1000 },
-        { element: null, duration: 400 }, // пауза
+        { element: null, duration: 400 },
         { element: rocketIcon, duration: 1000 },
-        { element: null, duration: 400 }, // пауза
+        { element: null, duration: 400 },
         { element: settingsIcon, duration: 1000 },
-        { element: null, duration: 400 }, // пауза
+        { element: null, duration: 400 },
         { element: discountIcon, duration: 1000 },
-        { element: null, duration: 400 }, // пауза
+        { element: null, duration: 400 },
     ];
 
     let currentStep = 0;
@@ -623,7 +625,7 @@ body {
 
     playAnimation();
 
-    // Mobile slider functionality
+    // Mobile slider functionality - РЕШЕНИЕ 1
     const cardsWrapper = document.querySelector('.cards-wrapper');
     const arrowLeft = document.getElementById('arrowLeft');
     const arrowRight = document.getElementById('arrowRight');
@@ -633,7 +635,8 @@ body {
     const totalCards = cards.length;
 
     function updateSlider() {
-        cardsWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+        const cardWidth = window.innerWidth;
+        cardsWrapper.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
         
         if (currentIndex === 0) {
             arrowLeft.classList.add('hidden');
@@ -696,6 +699,15 @@ body {
             }
         }
     }
+
+    // Обработчик изменения размера окна
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            updateSlider();
+        }, 150);
+    });
 
     updateSlider();
 </script>
