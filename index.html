@@ -674,22 +674,14 @@ body {
 
     let touchStartX = 0;
     let touchEndX = 0;
-    let isSwiping = false;
 
     cardsWrapper.addEventListener('touchstart', (e) => {
         touchStartX = e.changedTouches[0].screenX;
-        isSwiping = true;
-    }, { passive: true });
-
-    cardsWrapper.addEventListener('touchmove', (e) => {
-        if (!isSwiping) return;
     }, { passive: true });
 
     cardsWrapper.addEventListener('touchend', (e) => {
-        if (!isSwiping) return;
         touchEndX = e.changedTouches[0].screenX;
         handleSwipe();
-        isSwiping = false;
     }, { passive: true });
 
     function handleSwipe() {
