@@ -724,11 +724,11 @@ function handleTouchEnd(e) {
 }
 
 function handleSwipe() {
-    const swipeThreshold = 50;
+    const swipeThreshold = 30;
     const diffX = touchStartX - touchEndX;
     const diffY = Math.abs(touchStartY - touchEndY);
     
-    if (diffY > 30) return;
+    if (diffY > 50) return;
     
     if (Math.abs(diffX) > swipeThreshold) {
         if (diffX > 0 && currentIndex < totalCards - 1) {
