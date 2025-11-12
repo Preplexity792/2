@@ -679,11 +679,13 @@ let touchEndX = 0;
 let touchStartY = 0;
 let touchEndY = 0;
 let isSwiping = false;
+let hasSwiped = false;
 
 function handleTouchStart(e) {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
     isSwiping = false;
+    hasSwiped = false;
 }
 
 function handleTouchMove(e) {
@@ -698,28 +700,30 @@ function handleTouchMove(e) {
     // Определяем направление свайпа
     if (!isSwiping && (diffX > 10 || diffY > 10)) {
         isSwiping = true;
-        
-        // Если свайп горизонтальный - блокируем вертикальный скролл
-        if (diffX > diffY) {
-            e.preventDefault();
-        }
     }
     
-    // Продолжаем блокировать, если уже определили горизонтальный свайп
+    // Блокируем скролл только для горизонтальных свайпов
     if (isSwiping && diffX > diffY) {
         e.preventDefault();
+        hasSwiped = true;
     }
 }
 
 function handleTouchEnd(e) {
     touchEndX = e.changedTouches[0].clientX;
     touchEndY = e.changedTouches[0].clientY;
+    
+    if (hasSwiped) {
+        e.preventDefault();
+    }
+    
     handleSwipe();
     
-    // Сбрасываем
+    // Сбрасываем состояние
     touchStartX = 0;
     touchStartY = 0;
     isSwiping = false;
+    hasSwiped = false;
 }
 
 function handleSwipe() {
@@ -746,7 +750,7 @@ cardsWrapper.addEventListener('touchstart', handleTouchStart, { passive: false }
 cardsWrapper.addEventListener('touchmove', handleTouchMove, { passive: false });
 cardsWrapper.addEventListener('touchend', handleTouchEnd, { passive: false });
 
-    updateSlider();
+updateSlider();
 </script>
 
 </body>
