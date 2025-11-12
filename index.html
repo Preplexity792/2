@@ -672,27 +672,35 @@ body {
         }
     });
 
-    let touchStartX = 0;
+        let touchStartX = 0;
     let touchEndX = 0;
+    let touchStartY = 0;
+    let touchEndY = 0;
 
     cardsWrapper.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
     }, { passive: true });
 
     cardsWrapper.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
+        touchEndX = e.changedTouches[0].clientX;
+        touchEndY = e.changedTouches[0].clientY;
         handleSwipe();
     }, { passive: true });
 
     function handleSwipe() {
         const swipeThreshold = 50;
-        const diff = touchStartX - touchEndX;
+        const diffX = touchStartX - touchEndX;
+        const diffY = Math.abs(touchStartY - touchEndY);
         
-        if (Math.abs(diff) > swipeThreshold) {
-            if (diff > 0 && currentIndex < totalCards - 1) {
+        // Проверяем, что это горизонтальный свайп (а не вертикальный скролл)
+        if (diffY > 30) return;
+        
+        if (Math.abs(diffX) > swipeThreshold) {
+            if (diffX > 0 && currentIndex < totalCards - 1) {
                 currentIndex++;
                 updateSlider();
-            } else if (diff < 0 && currentIndex > 0) {
+            } else if (diffX < 0 && currentIndex > 0) {
                 currentIndex--;
                 updateSlider();
             }
