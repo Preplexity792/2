@@ -320,11 +320,13 @@ body {
     position: relative;
     overflow: hidden;
     padding: 0;
+    touch-action: pan-y;
   }
 
   .cards-wrapper {
     display: flex;
     transition: transform 0.3s var(--ease-standard);
+    touch-action: pan-y;
   }
 
   .card {
@@ -673,39 +675,78 @@ body {
     });
 
         let touchStartX = 0;
-    let touchEndX = 0;
-    let touchStartY = 0;
-    let touchEndY = 0;
+let touchEndX = 0;
+let touchStartY = 0;
+let touchEndY = 0;
+let isSwiping = false;
 
-    cardsWrapper.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-    }, { passive: true });
+function handleTouchStart(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    isSwiping = false;
+}
 
-    cardsWrapper.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].clientX;
-        touchEndY = e.changedTouches[0].clientY;
-        handleSwipe();
-    }, { passive: true });
-
-    function handleSwipe() {
-        const swipeThreshold = 50;
-        const diffX = touchStartX - touchEndX;
-        const diffY = Math.abs(touchStartY - touchEndY);
+function handleTouchMove(e) {
+    if (!touchStartX || !touchStartY) return;
+    
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
+    
+    const diffX = Math.abs(currentX - touchStartX);
+    const diffY = Math.abs(currentY - touchStartY);
+    
+    // Определяем направление свайпа
+    if (!isSwiping && (diffX > 10 || diffY > 10)) {
+        isSwiping = true;
         
-        // Проверяем, что это горизонтальный свайп (а не вертикальный скролл)
-        if (diffY > 30) return;
-        
-        if (Math.abs(diffX) > swipeThreshold) {
-            if (diffX > 0 && currentIndex < totalCards - 1) {
-                currentIndex++;
-                updateSlider();
-            } else if (diffX < 0 && currentIndex > 0) {
-                currentIndex--;
-                updateSlider();
-            }
+        // Если свайп горизонтальный - блокируем вертикальный скролл
+        if (diffX > diffY) {
+            e.preventDefault();
         }
     }
+    
+    // Продолжаем блокировать, если уже определили горизонтальный свайп
+    if (isSwiping && diffX > diffY) {
+        e.preventDefault();
+    }
+}
+
+function handleTouchEnd(e) {
+    touchEndX = e.changedTouches[0].clientX;
+    touchEndY = e.changedTouches[0].clientY;
+    handleSwipe();
+    
+    // Сбрасываем
+    touchStartX = 0;
+    touchStartY = 0;
+    isSwiping = false;
+}
+
+function handleSwipe() {
+    const swipeThreshold = 50;
+    const diffX = touchStartX - touchEndX;
+    const diffY = Math.abs(touchStartY - touchEndY);
+    
+    // Проверяем, что это горизонтальный свайп
+    if (diffY > 30) return;
+    
+    if (Math.abs(diffX) > swipeThreshold) {
+        if (diffX > 0 && currentIndex < totalCards - 1) {
+            currentIndex++;
+            updateSlider();
+        } else if (diffX < 0 && currentIndex > 0) {
+            currentIndex--;
+            updateSlider();
+        }
+    }
+}
+
+// КРИТИЧНО: используем { passive: false }
+cardsWrapper.addEventListener('touchstart', handleTouchStart, { passive: false });
+cardsWrapper.addEventListener('touchmove', handleTouchMove, { passive: false });
+cardsWrapper.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+updateSlider();
 
     updateSlider();
 </script>
