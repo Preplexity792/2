@@ -578,103 +578,103 @@ body {
         </section>
     </div>
 
-    <script>
-    // Animation for first card
-    const dollar = document.getElementById('dollar');
-    const ruble = document.getElementById('ruble');
-    const helpIcon = document.getElementById('helpIcon');
-    const settingsIcon = document.getElementById('settingsIcon');
-    const discountIcon = document.getElementById('discountIcon');
-    const rocketIcon = document.getElementById('rocketIcon');
-    const announcementIcon = document.getElementById('announcementIcon');
+   <script>
+// Animation for first card
+const dollar = document.getElementById('dollar');
+const ruble = document.getElementById('ruble');
+const helpIcon = document.getElementById('helpIcon');
+const settingsIcon = document.getElementById('settingsIcon');
+const discountIcon = document.getElementById('discountIcon');
+const rocketIcon = document.getElementById('rocketIcon');
+const announcementIcon = document.getElementById('announcementIcon');
 
-    const animationSequence = [
-        { element: helpIcon, duration: 1000 },
-        { element: null, duration: 400 }, // пауза
-        { element: announcementIcon, duration: 1000 },
-        { element: null, duration: 400 }, // пауза
-        { element: rocketIcon, duration: 1000 },
-        { element: null, duration: 400 }, // пауза
-        { element: settingsIcon, duration: 1000 },
-        { element: null, duration: 400 }, // пауза
-        { element: discountIcon, duration: 1000 },
-        { element: null, duration: 400 }, // пауза
-    ];
+const animationSequence = [
+    { element: helpIcon, duration: 1000 },
+    { element: null, duration: 400 },
+    { element: announcementIcon, duration: 1000 },
+    { element: null, duration: 400 },
+    { element: rocketIcon, duration: 1000 },
+    { element: null, duration: 400 },
+    { element: settingsIcon, duration: 1000 },
+    { element: null, duration: 400 },
+    { element: discountIcon, duration: 1000 },
+    { element: null, duration: 400 },
+];
 
-    let currentStep = 0;
+let currentStep = 0;
 
-    function hideAll() {
-        dollar.setAttribute('opacity', '0');
-        ruble.setAttribute('opacity', '0');
-        helpIcon.setAttribute('opacity', '0');
-        settingsIcon.setAttribute('opacity', '0');
-        discountIcon.setAttribute('opacity', '0');
-        rocketIcon.setAttribute('opacity', '0');
-        announcementIcon.setAttribute('opacity', '0');
-    }
+function hideAll() {
+    dollar.setAttribute('opacity', '0');
+    ruble.setAttribute('opacity', '0');
+    helpIcon.setAttribute('opacity', '0');
+    settingsIcon.setAttribute('opacity', '0');
+    discountIcon.setAttribute('opacity', '0');
+    rocketIcon.setAttribute('opacity', '0');
+    announcementIcon.setAttribute('opacity', '0');
+}
 
-    function playAnimation() {
-        hideAll();
-
-        const step = animationSequence[currentStep];
-        
-        if (step.element) {
-            step.element.setAttribute('opacity', '1');
-        }
-
-        setTimeout(() => {
-            currentStep = (currentStep + 1) % animationSequence.length;
-            playAnimation();
-        }, step.duration);
-    }
-
-    playAnimation();
-
-    // Mobile slider functionality
-    const cardsWrapper = document.querySelector('.cards-wrapper');
-    const arrowLeft = document.getElementById('arrowLeft');
-    const arrowRight = document.getElementById('arrowRight');
-    const cards = document.querySelectorAll('.card');
+function playAnimation() {
+    hideAll();
+    const step = animationSequence[currentStep];
     
-    let currentIndex = 0;
-    const totalCards = cards.length;
-    let leftArrowUnlocked = false;
-
-    function updateSlider() {
-        cardsWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
-        
-        if (currentIndex >= 3) {
-            leftArrowUnlocked = true;
-        }
-        
-        if (currentIndex === 0 || !leftArrowUnlocked) {
-            arrowLeft.classList.add('hidden');
-        } else {
-            arrowLeft.classList.remove('hidden');
-        }
-        
-        if (currentIndex === totalCards - 1) {
-            arrowRight.classList.add('hidden');
-        } else {
-            arrowRight.classList.remove('hidden');
-        }
+    if (step.element) {
+        step.element.setAttribute('opacity', '1');
     }
 
-    arrowRight.addEventListener('click', () => {
-        if (currentIndex < totalCards - 1) {
-            currentIndex++;
-            updateSlider();
-        }
-    });
+    setTimeout(() => {
+        currentStep = (currentStep + 1) % animationSequence.length;
+        playAnimation();
+    }, step.duration);
+}
 
-    arrowLeft.addEventListener('click', () => {
-        if (currentIndex > 0) {
-            currentIndex--;
-            updateSlider();
-        }
-    });
+playAnimation();
 
-        let touchStartX = 0;
+// Mobile slider functionality
+const cardsWrapper = document.querySelector('.cards-wrapper');
+const cardsContainer = document.querySelector('.cards-container');
+const arrowLeft = document.getElementById('arrowLeft');
+const arrowRight = document.getElementById('arrowRight');
+const cards = document.querySelectorAll('.card');
+
+let currentIndex = 0;
+const totalCards = cards.length;
+let leftArrowUnlocked = false;
+
+function updateSlider() {
+    cardsWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+    
+    if (currentIndex >= 3) {
+        leftArrowUnlocked = true;
+    }
+    
+    if (currentIndex === 0 || !leftArrowUnlocked) {
+        arrowLeft.classList.add('hidden');
+    } else {
+        arrowLeft.classList.remove('hidden');
+    }
+    
+    if (currentIndex === totalCards - 1) {
+        arrowRight.classList.add('hidden');
+    } else {
+        arrowRight.classList.remove('hidden');
+    }
+}
+
+arrowRight.addEventListener('click', () => {
+    if (currentIndex < totalCards - 1) {
+        currentIndex++;
+        updateSlider();
+    }
+});
+
+arrowLeft.addEventListener('click', () => {
+    if (currentIndex > 0) {
+        currentIndex--;
+        updateSlider();
+    }
+});
+
+let touchStartX = 0;
 let touchEndX = 0;
 let touchStartY = 0;
 let touchEndY = 0;
@@ -697,12 +697,10 @@ function handleTouchMove(e) {
     const diffX = Math.abs(currentX - touchStartX);
     const diffY = Math.abs(currentY - touchStartY);
     
-    // Определяем направление свайпа
     if (!isSwiping && (diffX > 10 || diffY > 10)) {
         isSwiping = true;
     }
     
-    // Блокируем скролл только для горизонтальных свайпов
     if (isSwiping && diffX > diffY) {
         e.preventDefault();
         hasSwiped = true;
@@ -719,7 +717,6 @@ function handleTouchEnd(e) {
     
     handleSwipe();
     
-    // Сбрасываем состояние
     touchStartX = 0;
     touchStartY = 0;
     isSwiping = false;
@@ -731,7 +728,6 @@ function handleSwipe() {
     const diffX = touchStartX - touchEndX;
     const diffY = Math.abs(touchStartY - touchEndY);
     
-    // Проверяем, что это горизонтальный свайп
     if (diffY > 30) return;
     
     if (Math.abs(diffX) > swipeThreshold) {
@@ -745,10 +741,10 @@ function handleSwipe() {
     }
 }
 
-// КРИТИЧНО: используем { passive: false }
-cardsWrapper.addEventListener('touchstart', handleTouchStart, { passive: false });
-cardsWrapper.addEventListener('touchmove', handleTouchMove, { passive: false });
-cardsWrapper.addEventListener('touchend', handleTouchEnd, { passive: false });
+// КРИТИЧНО: добавляем на контейнер, а не на wrapper
+cardsContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
+cardsContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
+cardsContainer.addEventListener('touchend', handleTouchEnd, { passive: false });
 
 updateSlider();
 </script>
