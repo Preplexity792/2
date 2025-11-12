@@ -368,6 +368,11 @@ body {
     cursor: pointer;
     z-index: 10;
     transition: all var(--duration-fast) var(--ease-standard);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   .arrow:hover {
