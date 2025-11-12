@@ -453,7 +453,7 @@ body {
             
             <div class="subtitle-container">
                 <p class="subtitle">
-                    Экономическая стратегия от миллиардера Игоря Рыбакова, в которой вы заключаете сделки, торгуетесь с партнёрами и развиваете предпринимательское мышление.
+                    Настольная игра от миллиардера Игоря Рыбакова, в которой вы заключаете сделки, торгуетесь с партнёрами и развиваете предпринимательское мышление.
                 </p>
             </div>
         </header>
@@ -631,11 +631,16 @@ body {
     
     let currentIndex = 0;
     const totalCards = cards.length;
+    let leftArrowUnlocked = false;
 
     function updateSlider() {
         cardsWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
         
-        if (currentIndex === 0) {
+        if (currentIndex >= 3) {
+            leftArrowUnlocked = true;
+        }
+        
+        if (currentIndex === 0 || !leftArrowUnlocked) {
             arrowLeft.classList.add('hidden');
         } else {
             arrowLeft.classList.remove('hidden');
